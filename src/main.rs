@@ -5,7 +5,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Running The server");
     println!("On address 0.0.0.0:8080");
 
-    HttpServer::new(|| App::new().service(hello_world))
+    HttpServer::new(|| App::new().service(hello_world).service(healthz))
         .bind(("0.0.0.0", 8080))?
         .run()
         .await?;
@@ -16,4 +16,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 #[actix_web::get("/")]
 async fn hello_world() -> Result<HttpResponse, Box<dyn std::error::Error>> {
     Ok(HttpResponse::Ok().body("Hey there, I am running"))
+}
+
+#[actix_web::get("/healthz")]
+async fn healthz() -> Result<HttpResponse, Box<dyn std::error::Error>> {
+    Ok(HttpResponse::Ok().body("Hey Health is Good"))
 }
